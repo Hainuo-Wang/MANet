@@ -43,6 +43,9 @@ def main():
     args = parser.parse_args()
     opt = option.parse(args.opt, args.gpu_ids_qsub, is_train=True)
     device_id = torch.cuda.current_device()
+    device1 = torch.device('cuda:{}'.format(device_id))
+    device2 = "cpu"
+    device = device1
 
     # convert to NoneDict, which returns None for missing keys
     opt = option.dict_to_nonedict(opt)
@@ -86,9 +89,8 @@ def main():
     #### loading resume state if exists
     if opt['path'].get('resume_state', None):
         # distributed resuming: all load into default GPU
-        device_id = torch.cuda.current_device()
         resume_state = torch.load(opt['path']['resume_state'],
-                                  map_location=lambda storage, loc: storage.cuda(device_id))
+                                  map_location=lambda storage, loc: storage.device)
         option.check_resume(opt, resume_state['iter'])  # check resume options
     else:
         resume_state = None
@@ -172,13 +174,13 @@ def main():
     #### init online degradation function
     prepro_train = util.SRMDPreprocessing(opt['scale'], random=True, l=opt['kernel_size'], add_noise=opt['train_noise'],
                                           noise_high=opt['noise_high'] / 255., add_jpeg=opt['train_jpeg'], jpeg_low=opt['jpeg_low'],
-                                          rate_cln=-1, device=torch.device('cuda:{}'.format(device_id)), sig=opt['sig'],
+                                          rate_cln=-1, device=device, sig=opt['sig'],
                                           sig1=opt['sig1'], sig2=opt['sig2'], theta=opt['theta'],
                                           sig_min=opt['sig_min'], sig_max=opt['sig_max'], rate_iso=opt['rate_iso'],
                                           is_training=True, sv_mode=0)
     prepro_val = util.SRMDPreprocessing(opt['scale'], random=False, l=opt['kernel_size'], add_noise=opt['test_noise'],
                                         noise_high=opt['noise'], add_jpeg=opt['test_jpeg'], jpeg_low=opt['jpeg'],
-                                        rate_cln=-1, device=torch.device('cuda:{}'.format(device_id)), sig=opt['sig'],
+                                        rate_cln=-1, device=device, sig=opt['sig'],
                                         sig1=opt['sig1'], sig2=opt['sig2'], theta=opt['theta'],
                                         sig_min=opt['sig_min'], sig_max=opt['sig_max'], rate_iso=opt['rate_iso'],
                                         is_training=False, sv_mode=0)
@@ -197,7 +199,7 @@ def main():
                 break
 
             if train_data['LQ'].shape[2] == 1:
-                train_data['GT'] = train_data['GT'].to(torch.device('cuda:{}'.format(device_id)))
+                train_data['GT'] = train_data['GT'].to(device)
                 LR_img, LR_n_img, ker_map, kernel = prepro_train(train_data['GT'], kernel=True)
             else:
                 LR_img, LR_n_img, ker_map, kernel = train_data['LQ'], torch.zeros(1, 1), torch.zeros(1, 1, 1)
@@ -235,7 +237,7 @@ def main():
                 for _, val_data in enumerate(val_loader):
                     idx += 1
 
-                    val_data['GT'] = val_data['GT'].to(torch.device('cuda:{}'.format(device_id)))
+                    val_data['GT'] = val_data['GT'].to(device)
                     LR_img, LR_n_img, ker_map, kernel = prepro_val(val_data['GT'], kernel=True)
 
                     model.feed_data(val_data, LR_img, LR_n_img, ker_map, kernel)
