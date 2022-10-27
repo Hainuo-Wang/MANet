@@ -1115,6 +1115,6 @@ def plot_kernel(out_k_np, savepath, gt_k_np=None):
         plt.colorbar(im, ax=ax)
         ax.set_title('Kernel PSNR: {:.2f}'.format(calculate_kernel_psnr(out_k_np, gt_k_np)))
 
-    plt.show()
+    # plt.show()
     plt.savefig(savepath)
 
