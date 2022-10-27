@@ -1,0 +1,170 @@
+22-10-27 18:19:15.350 - INFO:   name: 001_MANet_aniso_x4_test_stage1
+  suffix: None
+  model: blind
+  distortion: sr
+  scale: 4
+  crop_border: None
+  gpu_ids: [0]
+  kernel_size: 21
+  code_length: 15
+  sig_min: 0
+  sig_max: 0
+  sig: 3.0
+  sig1: 6
+  sig2: 1
+  theta: 0.7853981633974483
+  rate_iso: 0
+  sv_mode: 0
+  test_noise: False
+  noise: 15
+  test_jpeg: False
+  jpeg: 50
+  cal_lr_psnr: False
+  datasets:[
+    test_1:[
+      name: toy_dataset1
+      mode: GT
+      dataroot_GT: ../datasets/toy_dataset/HR_si
+      dataroot_LQ: None
+      phase: test
+      scale: 4
+      data_type: img
+    ]
+  ]
+  network_G:[
+    which_model_G: MANet_s1
+    in_nc: 3
+    out_nc: None
+    nf: None
+    nb: None
+    gc: None
+    manet_nf: 128
+    manet_nb: 1
+    split: 2
+    scale: 4
+  ]
+  path:[
+    strict_load: True
+    pretrain_model_K: ../experiments/pretrained_models/stage1_MANet_x4.pth
+    root: C:\Users\14945\Desktop\MANet-main
+    results_root: C:\Users\14945\Desktop\MANet-main\results\001_MANet_aniso_x4_test_stage1
+    log: C:\Users\14945\Desktop\MANet-main\results\001_MANet_aniso_x4_test_stage1
+  ]
+  is_train: False
+
+22-10-27 18:19:15.354 - INFO: Dataset [GTDataset - toy_dataset1] is created.
+22-10-27 18:19:15.355 - INFO: Number of test images in [toy_dataset1]: 2
+22-10-27 18:19:15.493 - INFO: Network G structure: DataParallel - MANet_s1, with parameters: 1,810,361
+22-10-27 18:19:15.493 - INFO: MANet_s1(
+  (kernel_estimation): MANet(
+    (m_head): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (m_down1): Sequential(
+      (0): MABlock(
+        (res): Sequential(
+          (0): MAConv(
+            (fc0): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (fc1): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          )
+          (1): ReLU(inplace=True)
+          (2): MAConv(
+            (fc0): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (fc1): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          )
+        )
+      )
+      (1): Conv2d(128, 256, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (m_body): MABlock(
+      (res): Sequential(
+        (0): MAConv(
+          (fc0): Sequential(
+            (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (fc1): Sequential(
+            (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+        (1): ReLU(inplace=True)
+        (2): MAConv(
+          (fc0): Sequential(
+            (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (fc1): Sequential(
+            (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+    (m_up1): Sequential(
+      (0): ConvTranspose2d(256, 128, kernel_size=(2, 2), stride=(2, 2))
+      (1): MABlock(
+        (res): Sequential(
+          (0): MAConv(
+            (fc0): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (fc1): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          )
+          (1): ReLU(inplace=True)
+          (2): MAConv(
+            (fc0): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+            (fc1): Sequential(
+              (0): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+              (1): ReLU(inplace=True)
+              (2): Conv2d(32, 128, kernel_size=(1, 1), stride=(1, 1))
+            )
+            (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          )
+        )
+      )
+    )
+    (m_tail): Conv2d(128, 441, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (softmax): Softmax(dim=1)
+  )
+)
+22-10-27 18:19:15.506 - INFO: Loading model for K [../experiments/pretrained_models/stage1_MANet_x4.pth] ...
