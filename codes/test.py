@@ -20,10 +20,6 @@ opt = option.parse(args.opt, is_train=False)
 opt = option.dict_to_nonedict(opt)
 device_id = torch.cuda.current_device()
 
-device1 = torch.device('cuda:{}'.format(device_id))
-device2 = "cpu"
-device = device1
-
 #### mkdir and logger
 util.mkdirs((path for key, path in opt['path'].items() if not key == 'experiments_root'
              and 'pretrain_model' not in key and 'resume' not in key))
@@ -66,7 +62,7 @@ for test_loader in test_loaders:
     #### preprocessing for LR_img and kernel map
     prepro = util.SRMDPreprocessing(opt['scale'], random=False, l=opt['kernel_size'], add_noise=opt['test_noise'],
                                     noise_high=opt['noise'] / 255., add_jpeg=opt['test_jpeg'], jpeg_low=opt['jpeg'],
-                                    rate_cln=-1, device=device, sig=opt['sig'],
+                                    rate_cln=-1, device=torch.device('cuda:{}'.format(device_id)), sig=opt['sig'],
                                     sig1=opt['sig1'], sig2=opt['sig2'], theta=opt['theta'],
                                     sig_min=opt['sig_min'], sig_max=opt['sig_max'], rate_iso=opt['rate_iso'],
                                     is_training=False, sv_mode=opt['sv_mode'])
@@ -82,7 +78,7 @@ for test_loader in test_loaders:
             LR_img, LR_n_img, ker_map, kernel = test_data['LQ'], test_data['LQ'], torch.ones(1, 1, 1), \
                                                 torch.ones(1, 1, opt['kernel_size'], opt['kernel_size'])
         elif generate_online:
-            test_data['GT'] = test_data['GT'].to(device)
+            test_data['GT'] = test_data['GT'].to(torch.device('cuda:{}'.format(device_id)))
             LR_img, LR_n_img, ker_map, kernel = prepro(test_data['GT'], kernel=True)
             print(ker_map.cpu())
         else:
